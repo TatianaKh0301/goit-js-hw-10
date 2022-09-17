@@ -10,6 +10,8 @@ body {
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
+  padding: 100px;
+  background-image: url('../images/worldmap.jpg');
 }
 
 #search-box {
@@ -17,4 +19,20 @@ body {
   padding: 8px;
   max-width: 320px;
   margin-bottom: 16px;
+}
+
+.list-item {
+  display: flex;
+  list-style: none;
+}
+
+.list-item-image {
+  margin-right: 20px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
+.name-flag-wrap {
+  display: flex;
+  align-items: center;
 }
