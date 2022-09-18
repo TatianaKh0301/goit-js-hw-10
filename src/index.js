@@ -1,12 +1,12 @@
 import './css/styles.css';
-import Notiflix from 'notiflix';
+// import Notiflix from 'notiflix';
 var debounce = require('lodash.debounce');
+import { fetchCountries } from "./fetchCountries";
 
 const DEBOUNCE_DELAY = 300;
-const messageShortInput = "Too many matches found. Please enter a more specific name.";
-const messageWrangInput = "Oops, there is no country with that name";
 
 let inputSearch = '';
+let data = {};
 
 const refs = {
     searchBox: document.querySelector('#search-box'),
@@ -24,42 +24,7 @@ function onInputSearch(e) {
     fetchCountries(inputSearch);
 }
 
-function fetchCountries(name) {
-    if (inputSearch !== ' ') {
-        let promise = fetch(`https://restcountries.com/v3.1/name/${inputSearch}?fields=name,capital,population,flags,languages`).then(
-            response => {
-                if (!response.ok || response.status === 404) {
-                    throw new Error(response.status);
-                }
-                return response.json();
-            },);
-        console.log("promise", promise);        
-        promise.then((data) => {
-            let lengthData = data.length;
-            let lengthInputSearch = inputSearch.length;
-            console.log("lengthInputSearch", lengthInputSearch);
-            
-            if (lengthInputSearch <= 1) {
-                Notiflix.Notify.info(messageShortInput);
-            }
-
-            if (lengthData === 1) {
-                renderCountryDescriprion(data);
-            }
-
-            if (lengthData > 1 && lengthData <= 10) {
-                renderCountriesList(data);
-            }            
-        })
-        .catch(error => {
-            Notiflix.Notify.failure(messageWrangInput);
-            clearCountryInfo();
-            clearCountryList();
-        });
-    }    
-}
-
-function renderCountriesList(data) {
+export function renderCountriesList(data) {
     clearCountryInfo();
     countryList.innerHTML = data.map(({ name, flags }) => 
         `
@@ -71,7 +36,7 @@ function renderCountriesList(data) {
     ).join('');
 }
 
-function renderCountryDescriprion(data) {
+export function renderCountryDescriprion(data) {
     clearCountryList();
     countryInfo.innerHTML = data.map(({ name, flags, capital, population, languages }) =>
         `
@@ -89,10 +54,10 @@ function renderCountryDescriprion(data) {
     
 }
 
-function clearCountryList() {
+export function clearCountryList() {
     countryList.innerHTML = '';
 }
 
-function clearCountryInfo() {
+export function clearCountryInfo() {
     countryInfo.innerHTML = '';
 }
