@@ -6,14 +6,13 @@ import {
     clearCountryInfo
 } from "./index";
 
-console.log("renderCountriesList", renderCountriesList);
-
-
 const messageShortInput = "Too many matches found. Please enter a more specific name.";
 const messageWrangInput = "Oops, there is no country with that name";
 
 export function fetchCountries(inputSearch) {
-    console.log('inputSearchFetchFunc', inputSearch);
+    if (inputSearch === '') {
+        return;
+    }
     if (inputSearch !== ' ') {
         let promise = fetch(`https://restcountries.com/v3.1/name/${inputSearch}?fields=name,capital,population,flags,languages`).then(
             response => {
@@ -21,15 +20,14 @@ export function fetchCountries(inputSearch) {
                     throw new Error(response.status);
                 }
                 return response.json();
-            },);
-        console.log("promise!!!", promise);        
+            },);      
         promise.then((data) => {
-            console.log("data", data);
             let lengthData = data.length;
             let lengthInputSearch = inputSearch.length;
-            console.log("lengthInputSearch", lengthInputSearch);
             
             if (lengthInputSearch <= 1) {
+                clearCountryInfo();
+                clearCountryList();
                 Notiflix.Notify.info(messageShortInput);
             }
 
